@@ -26,6 +26,12 @@ describe("Engineer", () => {
         expect("github" in obj).toEqual(true);
     })
 
+    it("should return an object containing a 'getGithub' method when called with the 'new' keyword", () => {
+        const obj = new Engineer();
+  
+        expect(typeof obj.getGithub).toBe("function");
+    })
+
     it("should return an object containing a 'getName' method when called with the 'new' keyword", () => {
         const obj = new Engineer();
   
