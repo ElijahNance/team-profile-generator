@@ -2,32 +2,37 @@ const Manager = require('../lib/Manager');
 const Engineer = require('../lib/Engineer');
 const Intern = require('../lib/Intern');
 const inquirer = require('inquirer');
-// const prompt = inquirer.createPromptModule();
 
 // create the team
-const generateTeamMembers = async (team) => {
+async function generateTeamMembers(team) {
     
-    // console.log("generateTeamMembers Starting ...");
-    await getManagerInfo(team)
-        .then(getOtherTeamMembers(team))
-    // console.log("generateTeamMembers Done ...");
+    console.log("generateTeamMembers Starting ...");
+
+    await getManagerInfo(team);
+    await getOtherTeamMembers(team);
+    
+    console.log("generateTeamMembers Done ...");
 
 };
 
 
 // export function to generate entire page
-exports.doHTML = function (team) {
-    // console.log("doHTML Starting ...");
-    generateTeamMembers(team);
+async function doHTML() {
+
+    const team = [];
     
-    // console.log("doHTML Done");
+    console.log("doHTML Starting ...");
+    
+    await generateTeamMembers(team);
+    
+    console.log("doHTML Done");
+
+    console.log(team);
 
     //HTML TEMPLATE goes here
 }
 
-//const getManagerInfo = (team) => {
-//function getManagerInfo(team) {
-exports.getManagerInfo = function (team) {
+async function getManagerInfo(team) {
     //This function is just to get the manager - have this separate because don't need to loop manager
     // console.log("getManagerInfo ...");
     return inquirer.prompt ([
@@ -56,11 +61,7 @@ exports.getManagerInfo = function (team) {
     })
 }
 
-//const getOtherTeamMembers = (team) =>{ 
-    
-//function getOtherTeamMembers(team) {
-
-exports.getOtherTeamMembers= function (team) {
+async function getOtherTeamMembers(team) {
     //This function is to get the rest of the team (engineers and interns) - have this separate because need to loop
     // console.log("getOTherTeamMembers ...");
 
@@ -131,3 +132,4 @@ exports.getOtherTeamMembers= function (team) {
     })
 };
 
+exports.doHTML = doHTML;
