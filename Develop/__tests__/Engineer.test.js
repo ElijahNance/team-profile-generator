@@ -1,5 +1,5 @@
 const Engineer = require("../lib/Engineer");
-
+// Test for Engineer Class
 describe("Engineer", () => {
 
     it("should return an object containing a 'name' property when called with the 'new' keyword", () => {

@@ -9,14 +9,8 @@ const internRole = "Intern";
 
 // create the team
 async function generateTeamMembers(team) {
-    
-    // console.log("generateTeamMembers Starting ...");
-
     await getManagerInfo(team);
     await getOtherTeamMembers(team);
-    
-    // console.log("generateTeamMembers Done ...");
-
 };
 
 
@@ -25,13 +19,10 @@ async function doHTML() {
 
     const team = [];
     
-    // console.log("doHTML Starting ...");
     
     await generateTeamMembers(team);
     
-    // console.log("doHTML Done");
 
-    console.log(team);
 
     // Generate HTML markup
     const pageMarkup=generateHTML(team);
@@ -87,7 +78,9 @@ function generateHTML(team) {
       </header>
       <main>`;
 
-    const managerMarkup = `
+    const managerMarkup =
+    //Used index position 0 since the Manager prompts always come first
+     `
         <article>
           <h2>${team[0].getRole()} ${team[0].name}</h2>
           <ul>
@@ -100,7 +93,7 @@ function generateHTML(team) {
 
     const teamMarkup = (team)=> {
         let workString = "";
-
+        // Loop gathering all the prompt data and placing it in HTML format
         for(let i=1; i < team.length; i++) {
             workString += `<article>`;
             workString += `<h2>${team[i].getRole()} ${team[i].name}</h2>`;
@@ -108,7 +101,7 @@ function generateHTML(team) {
             workString += `<li>ID:${team[i].id}</li>`;
             workString += `<li>Email: <a href = "mailto:${team[i].email}">${team[i].email}</a></li>`;
             workString += `</ul>`;
-
+            // If statement determing the role so the page knows whether to display GitHub or School
             if(team[i].getRole()===engineerRole) {
                 workString += `<li>GitHub: <a href="https://github.com/${team[i].github}">${team[i].github}</a></li>`;
             } else if(team[i].getRole()===internRole) {
@@ -136,7 +129,6 @@ function generateHTML(team) {
 
 async function getManagerInfo(team) {
     //This function is just to get the manager - have this separate because don't need to loop manager
-    // console.log("getManagerInfo ...");
     return inquirer.prompt ([
         {
             message: "Enter manager's name",
@@ -165,7 +157,6 @@ async function getManagerInfo(team) {
 
 async function getOtherTeamMembers(team) {
     //This function is to get the rest of the team (engineers and interns) - have this separate because need to loop
-    // console.log("getOTherTeamMembers ...");
 
     return inquirer.prompt ([
         {
@@ -223,9 +214,9 @@ async function getOtherTeamMembers(team) {
 
             console.log(employee);
         }
-
+        // Push's data into empty array so it can later be looped through for data
         team.push(employee);
-
+        // Allows the loop to either run again or finish depending on user input
         if (addEmployee) {
             return getOtherTeamMembers(team);
         } else {

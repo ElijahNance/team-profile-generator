@@ -1,5 +1,5 @@
 const Manager = require("../lib/Manager");
-
+// Test for Manager Class
 describe("Manager", () => {
     it("should return an object containing a 'name' property when called with the 'new' keyword", () => {
         const obj = new Manager();
