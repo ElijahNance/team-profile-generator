@@ -45,7 +45,7 @@ function generateHTML(team) {
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ENTER PAGE TITLE HERE</title>
+      <title>My Team</title>
       <!-- Minified version -->
       <style>
         @import "https://cdn.simplecss.org/simple.min.css";
@@ -103,7 +103,7 @@ function generateHTML(team) {
             workString += `</ul>`;
             // If statement determing the role so the page knows whether to display GitHub or School
             if(team[i].getRole()===engineerRole) {
-                workString += `<li>GitHub: <a href="https://github.com/${team[i].github}">${team[i].github}</a></li>`;
+                workString += `<li>GitHub: <a href="https://github.com/${team[i].github}/" target="_blank">${team[i].github}</a></li>`;
             } else if(team[i].getRole()===internRole) {
                 workString += `<li>School: ${team[i].school}</li>`;
             } else {
@@ -151,7 +151,6 @@ async function getManagerInfo(team) {
         const {name, id, email, officeNumber} = managerData;
         const manager = new Manager (name, id, email, officeNumber);
         team.push(manager);
-        console.log(manager);
     })
 }
 
@@ -208,11 +207,8 @@ async function getOtherTeamMembers(team) {
         if (role === 'Engineer') {
             employee = new Engineer (name, id, email, github);
 
-            console.log(employee);
         } else if (role === 'Intern') {
             employee = new Intern (name, id, email, school);
-
-            console.log(employee);
         }
         // Push's data into empty array so it can later be looped through for data
         team.push(employee);
