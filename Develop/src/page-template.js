@@ -2,16 +2,20 @@ const Manager = require('../lib/Manager');
 const Engineer = require('../lib/Engineer');
 const Intern = require('../lib/Intern');
 const inquirer = require('inquirer');
+const fs = require('fs');
+
+const engineerRole = "Engineer";
+const internRole = "Intern";
 
 // create the team
 async function generateTeamMembers(team) {
     
-    console.log("generateTeamMembers Starting ...");
+    // console.log("generateTeamMembers Starting ...");
 
     await getManagerInfo(team);
     await getOtherTeamMembers(team);
     
-    console.log("generateTeamMembers Done ...");
+    // console.log("generateTeamMembers Done ...");
 
 };
 
@@ -21,15 +25,113 @@ async function doHTML() {
 
     const team = [];
     
-    console.log("doHTML Starting ...");
+    // console.log("doHTML Starting ...");
     
     await generateTeamMembers(team);
     
-    console.log("doHTML Done");
+    // console.log("doHTML Done");
 
     console.log(team);
 
-    //HTML TEMPLATE goes here
+    // Generate HTML markup
+    const pageMarkup=generateHTML(team);
+
+    // Write markup to file
+    try {
+            fs.writeFileSync('team.html', pageMarkup);
+            console.log("Success!")
+        } catch (err) {
+            console.log(err);
+        }
+    
+}
+
+function generateHTML(team) {
+    const headerMarkup = `<!-- Instructor provided template -->
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>ENTER PAGE TITLE HERE</title>
+      <!-- Minified version -->
+      <style>
+        @import "https://cdn.simplecss.org/simple.min.css";
+    
+        main {
+          display: grid;
+          grid-column: 1/-1;
+          justify-items: center;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 1rem;
+          max-width: 1140px;
+          margin: auto;
+        }
+    
+        @media screen and (max-width: 1140px) {
+          main {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+        @media screen and (max-width: 720px) {
+          main {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <header>
+        <h1>My Team</h1>
+      </header>
+      <main>`;
+
+    const managerMarkup = `
+        <article>
+          <h2>${team[0].getRole()} ${team[0].name}</h2>
+          <ul>
+            <li>ID:${team[0].id}</li>
+            <li>Email: <a href = "mailto:${team[0].email}">${team[0].email}</a></li>
+            <li>Office Number: ${team[0].officeNumber}</li>
+          </ul>
+        </article>
+    `;
+
+    const teamMarkup = (team)=> {
+        let workString = "";
+
+        for(let i=1; i < team.length; i++) {
+            workString += `<article>`;
+            workString += `<h2>${team[i].getRole()} ${team[i].name}</h2>`;
+            workString += `<ul>`;
+            workString += `<li>ID:${team[i].id}</li>`;
+            workString += `<li>Email: <a href = "mailto:${team[i].email}">${team[i].email}</a></li>`;
+            workString += `</ul>`;
+
+            if(team[i].getRole()===engineerRole) {
+                workString += `<li>GitHub: <a href="https://github.com/${team[i].github}">${team[i].github}</a></li>`;
+            } else if(team[i].getRole()===internRole) {
+                workString += `<li>School: ${team[i].school}</li>`;
+            } else {
+                workString += `<li>Unknown Type</li>`;
+            };
+
+            workString += `</article>`;
+        };
+
+        return workString;
+    };
+
+    const footerMarkup = `</main>
+    <footer>
+      &copy; 2022-2023
+    </footer>
+  </body>
+  </html>
+  `;
+
+    return headerMarkup + managerMarkup + teamMarkup(team) + footerMarkup;
 }
 
 async function getManagerInfo(team) {

@@ -1,4 +1,5 @@
 const htmlBuilder = require("./src/page-template.js");
+const {generateHTML, writeToFile} = require('./src/index');
 
-console.log("Hello World");
+
 htmlBuilder.doHTML();
